@@ -24,7 +24,7 @@ class StoriesListViewModel: ObservableObject {
     @MainActor
     func loadInitialStories() {
         Task {
-            let result = await NetworkService.shared.fetchStories()
+            let result = try await NetworkService.shared.fetchStories()
             switch result {
             case .success(let loadedStories):
                 self.stories = loadedStories
@@ -54,7 +54,7 @@ class StoriesListViewModel: ObservableObject {
         isLoadingMore = true
         
         Task {
-            let result = await NetworkService.shared.fetchStories(page: currentPage + 1, pageSize: pageSize)
+            let result = try await NetworkService.shared.fetchStories(page: currentPage + 1, pageSize: pageSize)
             switch result {
             case .success(let newStories):
                 if !newStories.isEmpty {
@@ -65,6 +65,15 @@ class StoriesListViewModel: ObservableObject {
                 self.errorMessage = "Error loading more stories: \(error)"
             }
             isLoadingMore = false
+        }
+    }
+    
+    @MainActor
+    func checkAndLoadMoreStories(currentStory: Story) {
+        if let lastStory = stories.last, currentStory.id == lastStory.id, !isLoadingMore {
+            Task {
+                await loadMoreStories()
+            }
         }
     }
     

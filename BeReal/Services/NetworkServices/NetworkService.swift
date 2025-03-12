@@ -18,7 +18,7 @@ class NetworkService {
         case decodingError(Error)
     }
     
-    func fetchStories(page: Int = 1, pageSize: Int = 10) async -> Result<[Story], NetworkError> {
+    func fetchStories(page: Int = 1, pageSize: Int = 10) async throws -> Result<[Story], NetworkError> {
        
         try? await Task.sleep(nanoseconds: UInt64(1_000_000_000))
 
