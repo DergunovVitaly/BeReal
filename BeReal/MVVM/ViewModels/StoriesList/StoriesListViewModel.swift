@@ -8,9 +8,8 @@
 import SwiftUI
 import SwiftData
 
-class StoriesListViewModel: ObservableObject {
-    let coordinator: AppCoordinator
-    let context: ModelContext
+class StoriesListViewModel: BaseViewModel {
+   
     @Published var stories: [StoryEntity] = []
     @Published var errorMessage: String?
     @Published var isLoadingMore = false
@@ -18,13 +17,12 @@ class StoriesListViewModel: ObservableObject {
     private var currentPage = 1
     private let pageSize = 10
 
-    init(coordinator: AppCoordinator, context: ModelContext) {
-        self.coordinator = coordinator
-        self.context = context
-        Task {
-            await loadStories()
-        }
-    }
+    override init(coordinator: AppCoordinator, context: ModelContext) {
+        super.init(coordinator: coordinator, context: context)
+           Task {
+               await loadStories()
+           }
+       }
 
     @MainActor
     func loadStories() async {

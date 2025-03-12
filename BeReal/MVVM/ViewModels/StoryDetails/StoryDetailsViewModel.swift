@@ -8,15 +8,13 @@
 import SwiftData
 import SwiftUI
 
-class StoryDetailsViewModel: ObservableObject {
+class StoryDetailsViewModel: BaseViewModel {
+   
     @Published var story: StoryEntity
-    let coordinator: AppCoordinator
-    let context: ModelContext
 
     init(story: StoryEntity, coordinator: AppCoordinator, context: ModelContext) {
         self.story = story
-        self.coordinator = coordinator
-        self.context = context
+        super.init(coordinator: coordinator, context: context)
     }
 
     func toggleLike() {
