@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 class AppCoordinator: ObservableObject {
     @Published var state: AppState = .splash
@@ -27,8 +28,8 @@ class AppCoordinator: ObservableObject {
         navigate(to: .storiesList(viewModel))
     }
 
-    func navigateToStoryDetails(story: Story) {
-        let viewModel = StoryDetailsViewModel(story: story, coordinator: self)
-        navigate(to: .storyDetails(viewModel)) 
+    func navigateToStoryDetails(story: StoryEntity, context: ModelContext) {
+        let viewModel = StoryDetailsViewModel(story: story, coordinator: self, context: context)
+        navigate(to: .storyDetails(viewModel))
     }
 }

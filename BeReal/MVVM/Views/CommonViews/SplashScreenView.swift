@@ -10,6 +10,7 @@ import SwiftUI
 struct SplashScreenView: View {
     @ObservedObject var coordinator: AppCoordinator
     @StateObject private var viewModel: SplashScreenViewModel
+    @Environment(\.modelContext) private var context
     
     init(coordinator: AppCoordinator) {
         self.coordinator = coordinator
@@ -24,7 +25,7 @@ struct SplashScreenView: View {
             .onAppear {
                 Task {
                     try? await Task.sleep(nanoseconds: 3_000_000_000)
-                    viewModel.navigateToStoriesList()
+                    viewModel.navigateToStoriesList(context: context)
                 }
             }
     }

@@ -5,24 +5,32 @@
 //  Created by Vitaliy on 12.03.2025.
 //
 
+import SwiftData
 import SwiftUI
 
 class StoryDetailsViewModel: ObservableObject {
-    @Published var story: Story
+    @Published var story: StoryEntity
     let coordinator: AppCoordinator
+    let context: ModelContext
 
-    init(story: Story, coordinator: AppCoordinator) {
+    init(story: StoryEntity, coordinator: AppCoordinator, context: ModelContext) {
         self.story = story
         self.coordinator = coordinator
+        self.context = context
     }
 
     func toggleLike() {
         story.isLiked.toggle()
-        objectWillChange.send()
+        try? context.save()
     }
 
     func markAsSeen() {
         story.isSeen = true
-        objectWillChange.send()
+        try? context.save()
+    }
+    
+    func navigateToStoryList() {
+        let vm = StoriesListViewModel(coordinator: coordinator, context: context)
+        coordinator.navigateToStoriesList(viewModel: vm)
     }
 }

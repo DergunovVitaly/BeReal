@@ -33,8 +33,7 @@ class NetworkService {
 
             let allStories = usersResponse.pages
                 .flatMap { $0.users }
-                .map { Story(id: $0.id, name: $0.name, profilePictureURL: $0.profilePictureURL) }
-
+                .map { Story(id: $0.id, name: $0.name, profilePictureURL: $0.profilePictureURL, isSeen: false, isLiked: false) }
             let startIndex = (page - 1) * pageSize
             let endIndex = min(startIndex + pageSize, allStories.count)
 

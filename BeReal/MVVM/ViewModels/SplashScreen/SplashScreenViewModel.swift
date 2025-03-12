@@ -6,17 +6,17 @@
 //
 
 import SwiftUI
+import SwiftData
 
 class SplashScreenViewModel: ObservableObject {
     
     let coordinator: AppCoordinator
-    
     init(coordinator: AppCoordinator) {
         self.coordinator = coordinator
     }
     
-    func navigateToStoriesList() {
-        let viewModel = StoriesListViewModel(coordinator: coordinator)
-        coordinator.navigateToStoriesList(viewModel: viewModel)
-    }
+    func navigateToStoriesList(context: ModelContext) {
+          let viewModel = StoriesListViewModel(coordinator: coordinator, context: context)
+          coordinator.navigateToStoriesList(viewModel: viewModel)
+      }
 }

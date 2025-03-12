@@ -6,44 +6,54 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct StoriesListView: View {
+    
     @ObservedObject var viewModel: StoriesListViewModel
 
     var body: some View {
-        VStack {
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .padding()
+        ZStack {
+            if viewModel.isLoadingMore {
+                ProgressView()
             }
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 16) {
-                    ForEach(viewModel.stories, id: \.id) { story in
-                        VStack {
-                            StoryItemView(story: story)
-                                .onTapGesture {
-                                    viewModel.navigateToStoryDetails(for: story)
+            VStack {
+                if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .padding()
+                }
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: 16) {
+                        ForEach(viewModel.stories.uniqued(), id: \.id) { storyEntity in
+                            VStack {
+                                StoryItemView(story: storyEntity)
+                                    .onTapGesture {
+                                        viewModel.markStoryAsSeen(storyEntity)
+                                    }
+                                Button(action: {
+                                    viewModel.toggleLike(for: storyEntity)
+                                }) {
+                                    Image(systemName: storyEntity.isLiked ? "heart.fill" : "heart")
+                                        .font(.title2)
+                                        .foregroundColor(storyEntity.isLiked ? .red : .gray)
                                 }
-                            Button(action: {
-                                viewModel.toggleLike(for: story)
-                            }) {
-                                Image(systemName: story.isLiked ? "heart.fill" : "heart")
-                                    .font(.title2)
-                                    .foregroundColor(story.isLiked ? .red : .gray)
+                            }
+                            .onAppear {
+                                viewModel.checkAndLoadMoreStories(currentStory: storyEntity)
                             }
                         }
-                        .onAppear {
-                            viewModel.checkAndLoadMoreStories(currentStory: story)
-                        }
                     }
+                    .padding()
                 }
-                .padding()
             }
-        }
-        .onAppear {
-            viewModel.loadInitialStories()
+            .onAppear {
+                Task {
+                    await viewModel.loadStories()
+                }
+            }
         }
     }
 }

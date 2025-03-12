@@ -16,7 +16,7 @@ struct StoryDetailsView: View {
             VStack {
                 HStack {
                     Button(action: {
-                        viewModel.coordinator.goBack()
+                        viewModel.navigateToStoryList()
                     }) {
                         Image(systemName: "arrowshape.backward.fill")
                             .font(.largeTitle)
@@ -47,9 +47,9 @@ struct StoryDetailsView: View {
                         .font(.largeTitle)
                         .foregroundColor(viewModel.story.isLiked ? .red : .gray)
                 }
-                .padding(.top, 8)
+                .padding(.top, 10)
 
-                Text("Swipe down to go back")
+                Text("Swipe up to go back")
                     .font(.caption)
                     .foregroundColor(.white)
                     .padding(.bottom, 16)
@@ -62,8 +62,8 @@ struct StoryDetailsView: View {
         }
         .gesture(
             DragGesture().onEnded { value in
-                if value.translation.height > 100 {
-                    viewModel.coordinator.goBack()
+                if value.translation.height < 100 {
+                    viewModel.navigateToStoryList()
                 }
             }
         )

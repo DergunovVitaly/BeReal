@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct StoryItemView: View {
-    let story: Story
+    let story: StoryEntity
     
     var body: some View {
         VStack {
