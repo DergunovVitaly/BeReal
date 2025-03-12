@@ -31,7 +31,7 @@ struct StoriesListView: View {
                             VStack {
                                 StoryItemView(story: storyEntity)
                                     .onTapGesture {
-                                        viewModel.markStoryAsSeen(storyEntity)
+                                        viewModel.navigateToStoryDetails(for: storyEntity)
                                     }
                                 Button(action: {
                                     viewModel.toggleLike(for: storyEntity)
