@@ -7,12 +7,8 @@
 
 //
 //  ContentView.swift
-//  Tonwex
-//
-//  Created by Vitaliy on 26.01.2025.
-//
+
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
     @ObservedObject var coordinator: AppCoordinator

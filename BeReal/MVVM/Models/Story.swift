@@ -5,7 +5,6 @@
 //  Created by Vitaliy on 12.03.2025.
 //
 
-
 struct Story: Identifiable, Hashable {
     let id: Int
     let name: String
