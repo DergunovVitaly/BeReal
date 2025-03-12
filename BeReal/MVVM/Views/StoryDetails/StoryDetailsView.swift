@@ -5,10 +5,13 @@
 //  Created by Vitaliy on 12.03.2025.
 //
 import SwiftUI
+import SwiftData
 
 struct StoryDetailsView: View {
     @ObservedObject var viewModel: StoryDetailsViewModel
-   
+    @State private var textOpacity: Double = 0.3
+    @State private var textOffset: CGFloat = 0
+    
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
@@ -16,7 +19,7 @@ struct StoryDetailsView: View {
             VStack {
                 HStack {
                     Button(action: {
-                        viewModel.navigateToStoryList()
+                        viewModel.goBack()
                     }) {
                         Image(systemName: "arrowshape.backward.fill")
                             .font(.largeTitle)
@@ -47,12 +50,20 @@ struct StoryDetailsView: View {
                         .font(.largeTitle)
                         .foregroundColor(viewModel.story.isLiked ? .red : .gray)
                 }
-                .padding(.top, 10)
-
+                .padding(.bottom, 50)
+                
                 Text("Swipe up to go back")
-                    .font(.caption)
-                    .foregroundColor(.white)
-                    .padding(.bottom, 16)
+                                    .font(Font.custom("Inter", size: 24))
+                                    .foregroundColor(.white)
+                                    .opacity(textOpacity)
+                                    .offset(y: textOffset)
+                                    .padding(.bottom, 16)
+                                    .onAppear {
+                                        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                                            textOpacity = 1.0
+                                            textOffset = 5
+                                        }
+                                    }
 
                 Spacer()
             }
@@ -63,7 +74,7 @@ struct StoryDetailsView: View {
         .gesture(
             DragGesture().onEnded { value in
                 if value.translation.height < 100 {
-                    viewModel.navigateToStoryList()
+                    viewModel.goBack()
                 }
             }
         )

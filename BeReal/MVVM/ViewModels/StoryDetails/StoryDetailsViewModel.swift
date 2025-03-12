@@ -29,8 +29,7 @@ class StoryDetailsViewModel: ObservableObject {
         try? context.save()
     }
     
-    func navigateToStoryList() {
-        let vm = StoriesListViewModel(coordinator: coordinator, context: context)
-        coordinator.navigateToStoriesList(viewModel: vm)
+    func goBack() {
+        coordinator.goBack()
     }
 }
