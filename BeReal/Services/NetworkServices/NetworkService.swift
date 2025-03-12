@@ -20,7 +20,7 @@ class NetworkService {
     
     func fetchStories(page: Int = 1, pageSize: Int = 10) async -> Result<[Story], NetworkError> {
        
-        try? await Task.sleep(nanoseconds: UInt64(1_000_000_000) * UInt64(page))
+        try? await Task.sleep(nanoseconds: UInt64(1_000_000_000))
 
         guard let url = Bundle.main.url(forResource: "users", withExtension: "json") else {
             return .failure(.fileNotFound)

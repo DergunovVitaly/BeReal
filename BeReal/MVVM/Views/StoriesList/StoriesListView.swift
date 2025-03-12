@@ -35,8 +35,10 @@ struct StoriesListView: View {
                             }
                         }
                         .onAppear {
-                            if story.id == viewModel.stories.last?.id {
-                                viewModel.loadMoreStories()
+                            if let lastStory = viewModel.stories.last, story.id == lastStory.id, !viewModel.isLoadingMore {
+                                Task {
+                                    await viewModel.loadMoreStories()
+                                }
                             }
                         }
                     }

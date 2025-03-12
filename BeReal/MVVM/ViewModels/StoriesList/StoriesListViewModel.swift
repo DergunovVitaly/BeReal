@@ -49,7 +49,7 @@ class StoriesListViewModel: ObservableObject {
     }
     
     @MainActor
-    func loadMoreStories() {
+    func loadMoreStories() async {
         guard !isLoadingMore else { return }
         isLoadingMore = true
         
