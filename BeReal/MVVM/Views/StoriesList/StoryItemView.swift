@@ -22,7 +22,7 @@ struct StoryItemView: View {
                     ProgressView()
                 }
             }
-            .frame(width: 70, height: 70)
+            .frame(width: 100, height: 100)
             .clipShape(Circle())
             .overlay(
                 Circle().stroke(story.isSeen ? Color.gray : Color.blue, lineWidth: 3)

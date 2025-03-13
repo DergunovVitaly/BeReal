@@ -11,49 +11,45 @@ import SwiftData
 struct StoriesListView: View {
     
     @ObservedObject var viewModel: StoriesListViewModel
-
+    
     var body: some View {
-        ZStack {
-            if viewModel.isLoadingMore {
-                ProgressView()
+        VStack {
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
             }
-            
-            VStack {
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
-                }
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: 16) {
-                        ForEach(viewModel.stories.uniqued(), id: \.id) { storyEntity in
-                            VStack {
-                                StoryItemView(story: storyEntity)
-                                    .onTapGesture {
-                                        viewModel.navigateToStoryDetails(for: storyEntity)
-                                    }
-                                Button(action: {
-                                    viewModel.toggleLike(for: storyEntity)
-                                }) {
-                                    Image(systemName: storyEntity.isLiked ? "heart.fill" : "heart")
-                                        .font(.title2)
-                                        .foregroundColor(storyEntity.isLiked ? .red : .gray)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 16) {
+                    ForEach(viewModel.stories.uniqued(), id: \.id) { storyEntity in
+                        VStack {
+                            StoryItemView(story: storyEntity)
+                                .onTapGesture {
+                                    viewModel.navigateToStoryDetails(for: storyEntity)
                                 }
-                            }
-                            .onAppear {
-                                viewModel.checkAndLoadMoreStories(currentStory: storyEntity)
+                            Button(action: {
+                                viewModel.toggleLike(for: storyEntity)
+                            }) {
+                                Image(systemName: storyEntity.isLiked ? "heart.fill" : "heart")
+                                    .font(.title2)
+                                    .foregroundColor(storyEntity.isLiked ? .red : .gray)
                             }
                         }
+                        .onAppear {
+                            viewModel.checkAndLoadMoreStories(currentStory: storyEntity)
+                        }
                     }
-                    .padding()
+                }
+                .padding()
+            }
+            
+            HStack {
+                if viewModel.isLoadingMore {
+                    ProgressView()
                 }
             }
-            .onAppear {
-                Task {
-                    await viewModel.loadStories()
-                }
-            }
+            .frame(width: 100, height: 100)
+            Spacer()
         }
     }
 }

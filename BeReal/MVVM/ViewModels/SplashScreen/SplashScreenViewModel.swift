@@ -16,7 +16,10 @@ class SplashScreenViewModel: ObservableObject {
     }
     
     func navigateToStoriesList(context: ModelContext) {
-          let viewModel = StoriesListViewModel(coordinator: coordinator, context: context)
-          coordinator.navigateToStoriesList(viewModel: viewModel)
-      }
+        let viewModel = StoriesListViewModel(coordinator: coordinator, context: context)
+        Task {
+            await viewModel.loadStories()
+        }
+        coordinator.navigateToStoriesList(viewModel: viewModel)
+    }
 }

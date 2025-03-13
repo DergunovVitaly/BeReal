@@ -21,9 +21,9 @@ struct StoryDetailsView: View {
                     Button(action: {
                         viewModel.goBack()
                     }) {
-                        Image(systemName: "arrowshape.backward.fill")
+                        Image(systemName: "arrow.left")
                             .font(.largeTitle)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.white)
                     }
                     Spacer()
                 }
@@ -73,7 +73,7 @@ struct StoryDetailsView: View {
         }
         .gesture(
             DragGesture().onEnded { value in
-                if value.translation.height < 100 {
+                if value.translation.height < 10 {
                     viewModel.goBack()
                 }
             }
